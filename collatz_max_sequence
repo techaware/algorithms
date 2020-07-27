@@ -1,0 +1,40 @@
+under = 1000000
+# countlist keeps track of previously observed counts
+countlist = dict()
+
+def check(x):
+    if x in countlist.keys():
+        cx = countlist[x]
+        return cx
+    else:
+        y = x*3 + 1
+        cx=count(y)
+        countlist[x]=cx+1
+        return cx+1
+
+def count(x):
+    i = 0
+    while x!=1:
+        if (x%2) == 0:
+            i = i + 1
+            x = x/2
+        else:
+            # check if x was already counted. We check for odd numbers only as an optimization technique. 
+            i = i + check(x)
+            break
+    return i
+
+x = 1
+while (x<=under):
+    # Based on some math, its deduced that longest sequence number has form:4x-1 or 4x+1
+    if ((x-1)%4 == 0)or ((x+1)%4 == 0):
+        countlist[x]=count(x)
+    x = x + 1
+
+# since countlist dict has keys with value more that upperlimit (3x+1 operation), find the max for keys less that 100
+max = 0
+for x in countlist.keys():
+    if (countlist[x] > max)&(x<=under):
+        max = countlist[x]
+
+print(f"max collatz sequence for numbers under {under}:{max}")
